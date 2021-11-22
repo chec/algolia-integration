@@ -119,7 +119,8 @@ const handler: IntegrationHandler = async (request, context) => {
 
     case 'products.delete':
       // Delete product from index
-      await client.initIndex(products_index_name).deleteObject(payload.id);
+      // @ts-ignore-next-line
+      await client.initIndex(products_index_name).deleteObject(request.body.model_ids[0]);
       return {
         statusCode: 204,
         body: '',
@@ -139,7 +140,8 @@ const handler: IntegrationHandler = async (request, context) => {
 
     case 'categories.delete':
       // Delete category from index
-      await client.initIndex(categories_index_name).deleteObject(payload.id);
+      // @ts-ignore-next-line
+      await client.initIndex(categories_index_name).deleteObject(request.body.model_ids[0]);
       return {
         statusCode: 204,
         body: '',
