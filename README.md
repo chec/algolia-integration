@@ -3,6 +3,10 @@
 This repo contains an integration for Algolia, which will automatically update an index when products or categories
 change in the Chec API.
 
+<p align="center">
+<img src="https://cdn.chec.io/chec-assets/integrations/algolia/algolia-cover.png" align="center" />
+</p>
+
 ## Configuration
 
 This integration requires the following configuration fields:
