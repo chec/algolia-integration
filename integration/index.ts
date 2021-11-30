@@ -15,8 +15,8 @@ const handler: IntegrationHandler = async (request, context) => {
 
   // Establish index names, falling back to defaults
   const {
-    products_index_name = 'products',
-    categories_index_name = 'categories',
+    products_index = 'products',
+    categories_index = 'categories',
   } = config;
 
   // Initialize Algolia client
@@ -47,7 +47,7 @@ const handler: IntegrationHandler = async (request, context) => {
         // Sync all products
         data.map((product) => {
           promises.push(
-            saveProduct(client, products_index_name, product)
+            saveProduct(client, products_index, product)
               .then(() => {
                 productsAdded++;
               })
@@ -78,7 +78,7 @@ const handler: IntegrationHandler = async (request, context) => {
         // Sync all products
         data.map((category) => {
           promises.push(
-            saveCategory(client, categories_index_name, category)
+            saveCategory(client, categories_index, category)
               .then(() => {
                 categoriesAdded++;
               })
@@ -108,7 +108,7 @@ const handler: IntegrationHandler = async (request, context) => {
     case 'products.create':
     case 'products.update':
       // Create/update product in index
-      result = await saveProduct(client, products_index_name, request.body.payload);
+      result = await saveProduct(client, products_index, request.body.payload);
       return {
         statusCode: request.body.event === 'products.create' ? 201 : 200,
         body: JSON.stringify({
@@ -120,7 +120,7 @@ const handler: IntegrationHandler = async (request, context) => {
     case 'products.delete':
       // Delete product from index
       // @ts-ignore-next-line
-      await client.initIndex(products_index_name).deleteObject(request.body.model_ids[0]);
+      await client.initIndex(products_index).deleteObject(request.body.model_ids[0]);
       return {
         statusCode: 204,
         body: '',
@@ -129,7 +129,7 @@ const handler: IntegrationHandler = async (request, context) => {
     case 'categories.create':
     case 'categories.update':
       // Create/update category in index
-      result = await saveCategory(client, categories_index_name, request.body.payload);
+      result = await saveCategory(client, categories_index, request.body.payload);
       return {
         statusCode: request.body.event === 'categories.create' ? 201 : 200,
         body: JSON.stringify({
@@ -141,7 +141,7 @@ const handler: IntegrationHandler = async (request, context) => {
     case 'categories.delete':
       // Delete category from index
       // @ts-ignore-next-line
-      await client.initIndex(categories_index_name).deleteObject(request.body.model_ids[0]);
+      await client.initIndex(categories_index).deleteObject(request.body.model_ids[0]);
       return {
         statusCode: 204,
         body: '',
