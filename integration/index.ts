@@ -173,7 +173,7 @@ function saveObject(client, indexName, payload) {
  * @param {object} product
  */
 function saveProduct(client, indexName, product) {
-  const payload = {
+  let payload = {
     objectID: product.id, // Only field required by Algolia
     id: product.id,
     name: product.name,
@@ -187,7 +187,7 @@ function saveProduct(client, indexName, product) {
     seo: product.seo,
     sort_order: product.sort_order,
     extra_fields: product.extra_fields,
-    attributes: product.attributes,
+    attributes: product.attributes, // Leaving as-is to avoid making breaking changes
     categories: product.categories,
     related_products: product.related_products,
     meta: product.meta,
@@ -195,6 +195,15 @@ function saveProduct(client, indexName, product) {
     created: product.created,
     updated: product.updated,
   };
+
+  product.attributes && product.attributes.map((a) => {
+    payload['attribute_' + a.name] = {
+      name: a.name,
+      id: a.id,
+      value: a.value,
+      meta: a.meta,
+    }
+  });
 
   return saveObject(client, indexName, payload);
 }
