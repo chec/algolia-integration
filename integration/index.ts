@@ -196,6 +196,15 @@ function saveProduct(client, indexName, product) {
     updated: product.updated,
   };
 
+  product.attributes && product.attributes.map(({ id, name, value, meta }) => {
+    payload[`attribute_${name}`] = {
+      name,
+      id,
+      value,
+      meta,
+    }
+  });
+
   return saveObject(client, indexName, payload);
 }
 
